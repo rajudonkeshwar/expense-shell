@@ -13,6 +13,7 @@ LOG_FILE_NAME="$LOGS_FOLDER/$LOG_FILE-$TIMESTAMP.log"
 
 mkdir -p $LOGS_FOLDER
 
+
 VALIDATE(){
     if [ $1 -ne 0 ]
     then
@@ -40,14 +41,24 @@ CHECK_ROOT
 dnf module disable nodejs -y &>>$LOG_FILE_NAME
 VALIDATE $? "Disabling existing default NodeJS"
 
+
 dnf module enable nodejs:20 -y &>>$LOG_FILE_NAME
 VALIDATE $? "enabling nodejs:20"
+
 
 dnf install nodejs -y &>>$LOG_FILE_NAME
 VALIDATE $? "installing node js"
 
-useradd expense &>>$LOG_FILE_NAME
-VALIDATE $? "adding of expense user"
+
+id expense &>>$LOG_FILE_NAME
+if [ $? -ne 0 ]
+then
+    useradd expense &>>$LOG_FILE_NAME
+    VALIDATE $? "Adding expense user"
+else
+    echo -e "expense user already exists ... $Y SKIPPING $N"
+fi
+
 
 mkdir -p /app &>>$LOG_FILE_NAME
 VALIDATE $? " creating app/ directory"
@@ -56,14 +67,18 @@ VALIDATE $? " creating app/ directory"
 curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip &>>$LOG_FILE_NAME
 VALIDATE $? " downlaoding backend-v2.zip file "
 
+
 cd /app &>>$LOG_FILE_NAME
 VALIDATE $? " redirecting app folder "
+
 
 unzip /tmp/backend.zip &>>$LOG_FILE_NAME
 VALIDATE $? " unzipping the backend.zip "
 
+
 npm install &>>$LOG_FILE_NAME
 VALIDATE $? " running npm command  "
+
 
 cp  /opt/expense-shell/expense-shell_practice/back_end.service  /etc/systemd/system/backend.service &>>$LOG_FILE_NAME
 VALIDATE $? " coping the backend.service file  "
@@ -79,6 +94,7 @@ VALIDATE $? " installing mysql "
 
 mysql -h mysql.vijaychandra.site -uroot -pExpenseApp@1 < /app/schema/backend.sql &>>$LOG_FILE_NAME
 VALIDATE $? " loading schema "
+
 
 systemctl restart backend &>>$LOG_FILE_NAME
 VALIDATE $? " restarting the backend "
