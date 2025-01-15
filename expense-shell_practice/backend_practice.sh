@@ -86,7 +86,7 @@ cp  /opt/expense-shell/expense-shell_practice/back_end.service  /etc/systemd/sys
 VALIDATE $? " coping the backend.service file  "
 
 
-dnf install mysql -y &>>$LOGSetting up the transactions schema and tables_FILE_NAME
+dnf install mysql -y &>>$LOGSetting
 VALIDATE $? " installing mysql "
 
 
