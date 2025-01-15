@@ -20,6 +20,7 @@ VALIDATE(){
         echo -e "$2 ... $G SUCCESS $N"
     fi
 }
+mkdir -p $LOGS_FOLDER
 CHECK_ROOT(){
     if [ $USERID -ne 0 ]
     then
