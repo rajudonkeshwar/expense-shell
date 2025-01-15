@@ -46,8 +46,10 @@ dnf module enable nodejs:20 -y &>>$LOG_FILE_NAME
 VALIDATE $? "enabling nodejs:20"
 
 
+
 dnf install nodejs -y &>>$LOG_FILE_NAME
 VALIDATE $? "installing node js"
+
 
 
 id expense &>>$LOG_FILE_NAME
@@ -68,8 +70,8 @@ curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expen
 VALIDATE $? " downlaoding backend-v2.zip file "
 
 
-cd /app &>>$LOG_FILE_NAME
-VALIDATE $? " redirecting app folder "
+cd /app
+rm -rf /app/*
 
 
 unzip /tmp/backend.zip &>>$LOG_FILE_NAME
