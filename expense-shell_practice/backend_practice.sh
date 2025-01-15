@@ -86,16 +86,16 @@ cp  /opt/expense-shell/expense-shell_practice/back_end.service  /etc/systemd/sys
 VALIDATE $? " coping the backend.service file  "
 
 
-systemctl daemon-reload &>>$LOG_FILE_NAME
-VALIDATE $? " reloading the daemon-reload  "
-
-
-dnf install mysql -y &>>$LOG_FILE_NAME
+dnf install mysql -y &>>$LOGSetting up the transactions schema and tables_FILE_NAME
 VALIDATE $? " installing mysql "
 
 
 mysql -h mysql.vijaychandra.site -uroot -pExpenseApp@1 < /app/schema/backend.sql &>>$LOG_FILE_NAME
-VALIDATE $? " loading schema "
+VALIDATE $? " Setting up the transactions schema and tables "
+
+
+systemctl daemon-reload &>>$LOG_FILE_NAME
+VALIDATE $? " reloading the daemon-reload  "
 
 
 systemctl restart backend &>>$LOG_FILE_NAME
