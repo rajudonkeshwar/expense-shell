@@ -33,54 +33,54 @@ echo "Script started executing at: $TIMESTAMP" &>>$LOG_FILE_NAME
 
 CHECK_ROOT
 
-dnf module disable nodejs -y
+dnf module disable nodejs -y &>>$LOG_FILE_NAME
 VALIDATE $? "Disabling existing default NodeJS"
 
-dnf module enable nodejs:20 -y
+dnf module enable nodejs:20 -y &>>$LOG_FILE_NAME
 VALIDATE $? "enabling nodejs:20"
 
-dnf install nodejs -y
+dnf install nodejs -y &>>$LOG_FILE_NAME
 VALIDATE $? "installing node js"
 
-useradd expense
+useradd expense &>>$LOG_FILE_NAME
 VALIDATE $? "adding of expense user"
 
-mkdir -p /app
+mkdir -p /app &>>$LOG_FILE_NAME
 VALIDATE $? " creating app/ directory"
 
 
-curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip &>>$LOG_FILE_NAME
 VALIDATE $? " downlaoding backend-v2.zip file "
 
-cd /app
+cd /app &>>$LOG_FILE_NAME
 VALIDATE $? " redirecting app folder "
 
-unzip /tmp/backend.zip
+unzip /tmp/backend.zip &>>$LOG_FILE_NAME
 VALIDATE $? " unzipping the backend.zip "
 
-npm install
+npm install &>>$LOG_FILE_NAME
 VALIDATE $? " running npm command  "
 
-cp  /opt/expense-shell/expense-shell_practice/back_end.service  /etc/systemd/system/backend.service
+cp  /opt/expense-shell/expense-shell_practice/back_end.service  /etc/systemd/system/backend.service &>>$LOG_FILE_NAME
 VALIDATE $? " coping the backend.service file  "
 
 
-systemctl daemon-reload
+systemctl daemon-reload &>>$LOG_FILE_NAME
 VALIDATE $? " reloading the daemon-reload  "
 
 
-dnf install mysql -y
+dnf install mysql -y &>>$LOG_FILE_NAME
 VALIDATE $? " installing mysql "
 
 
-mysql -h mysql.vijaychandra.site -uroot -pExpenseApp@1 < /app/schema/backend.sql
+mysql -h mysql.vijaychandra.site -uroot -pExpenseApp@1 < /app/schema/backend.sql &>>$LOG_FILE_NAME
 VALIDATE $? " loading schema "
 
-systemctl restart backend
+systemctl restart backend &>>$LOG_FILE_NAME
 VALIDATE $? " restarting the backend "
 
 
-systemctl enable backend
+systemctl enable backend &>>$LOG_FILE_NAME
 VALIDATE $? " enabling the backend "
 
 
